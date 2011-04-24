@@ -1,0 +1,8 @@
+<decorators defaultdir="/WEB-INF/decorators">
+    <!--<decorator name="main" page="charity_decorator.jsp">-->
+        <!--<pattern>*</pattern>-->
+    <!--</decorator>-->
+    <decorator name="main" page="sparkling_decorator.jsp">
+        <pattern>*</pattern>
+    </decorator>
+</decorators>

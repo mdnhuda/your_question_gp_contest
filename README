@@ -1,0 +1,1 @@
+This application is built using Spring framework on Java. It allows creating user accounts, for asking question or answering. It uses Apache Lucene for text searching. It can also utilize webservices of GP (Grameen Phone, a Bangladeshi Mobile Phone Operator) for sending question and receiving replies via SMS.

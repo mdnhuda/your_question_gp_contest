@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app xmlns="http://java.sun.com/xml/ns/j2ee"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee
+            http://java.sun.com/xml/ns/j2ee/web-app_2_4.xsd"
+         version="2.4">
+    <context-param>
+        <param-name>contextConfigLocation</param-name>
+        <param-value>/WEB-INF/applicationContext.xml</param-value>
+    </context-param>
+
+    <listener>
+        <listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
+    </listener>
+
+
+    <filter>
+        <filter-name>sitemesh</filter-name>
+        <filter-class>com.opensymphony.module.sitemesh.filter.PageFilter</filter-class>
+    </filter>
+    <filter-mapping>
+        <filter-name>sitemesh</filter-name>
+        <url-pattern>/*</url-pattern>
+    </filter-mapping>
+
+    <filter>
+        <filter-name>auth</filter-name>
+        <filter-class>org.questions.ctlr.AuthFilter</filter-class>
+    </filter>
+    <filter-mapping>
+        <filter-name>auth</filter-name>
+        <url-pattern>/app/*</url-pattern>
+    </filter-mapping>
+
+    <filter>
+        <filter-name>common</filter-name>
+        <filter-class>org.questions.ctlr.CommonFilter</filter-class>
+    </filter>
+    <filter-mapping>
+        <filter-name>common</filter-name>
+        <url-pattern>/*</url-pattern>
+    </filter-mapping>
+
+    <servlet>
+        <servlet-name>app</servlet-name>
+        <servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>app</servlet-name>
+        <url-pattern>/app/*</url-pattern>
+    </servlet-mapping>
+
+    <!-- ===================================================================== -->
+    <!--   TAG Library Definitions                                             -->
+    <!-- ===================================================================== -->
+
+    <jsp-config>
+        <taglib>
+            <taglib-uri>/c.tld</taglib-uri>
+            <taglib-location>/WEB-INF/c.tld</taglib-location>
+        </taglib>
+
+        <taglib>
+            <taglib-uri>/fmt.tld</taglib-uri>
+            <taglib-location>/WEB-INF/fmt.tld</taglib-location>
+        </taglib>
+
+        <taglib>
+            <taglib-uri>/spring.tld</taglib-uri>
+            <taglib-location>/WEB-INF/spring.tld</taglib-location>
+        </taglib>
+
+        <taglib>
+            <taglib-uri>/spring-form.tld</taglib-uri>
+            <taglib-location>/WEB-INF/spring-form.tld</taglib-location>
+        </taglib>
+
+    </jsp-config>
+
+</web-app>

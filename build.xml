@@ -1,0 +1,101 @@
+<?xml version="1.0"?>
+<project basedir="." default="build" name="web-app-gpws">
+
+    <description>
+        Test Web Application
+    </description>
+
+    <!-- ====================================================================================== -->
+    <!-- +++  Global Properties  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ -->
+    <!-- ====================================================================================== -->
+
+    <property file="build.properties"/>
+    <property name="src.dir" value="${basedir}/src"/>
+    <property name="web.dir" value="${basedir}/web"/>
+    <property name="lib.dir" value="${basedir}/lib"/>
+    <property name="props.dir" value="${basedir}/props"/>
+
+    <property name="tomcat.lib" value="${tomcat.home}/lib"/>
+
+    <property name="classes.dir" value="${build.dir}/WEB-INF/classes"/>
+
+    <path id="app.classpath">
+        <fileset dir="${lib.dir}">
+            <include name="*.jar"/>
+        </fileset>
+        <fileset dir="${tomcat.lib}">
+            <include name="*.jar"/>
+        </fileset>
+    </path>
+
+    <!-- ====================================================================================== -->
+    <!-- +++  Targets  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ -->
+    <!-- ====================================================================================== -->
+
+    <target name="init">
+        <tstamp>
+            <format property="build.tstamp" pattern="yyyy-MM-dd HH:mm:ss"/>
+        </tstamp>
+        <echo message="Build timestamp: ${build.tstamp}"/>
+
+        <mkdir dir="${classes.dir}"/>
+    </target>
+
+    <target name="resources" depends="init" description="Copy application libraries and web resources">
+        <copy todir="${build.dir}">
+            <fileset dir="${web.dir}"/>
+        </copy>
+
+        <mkdir dir="${build.dir}/WEB-INF/lib"/>
+        <copy todir="${build.dir}/WEB-INF/lib">
+            <fileset dir="${lib.dir}">
+                <include name="*.jar"/>
+            </fileset>
+        </copy>
+
+        <copy todir="${classes.dir}">
+            <fileset dir="${src.dir}" excludes="**/*.java"/>
+        </copy>
+
+        <copy todir="${classes.dir}">
+            <fileset dir="${props.dir}"/>
+        </copy>
+    </target>
+
+    <target name="compile" depends="init">
+        <javac destdir="${classes.dir}"
+               classpathref="app.classpath"
+               srcdir="${src.dir}"/>
+    </target>
+
+    <target name="clean" description="remove all built files">
+        <delete dir="${build.dir}"/>
+    </target>
+
+    <target name="build" depends="clean, resources, compile" description="Build the project"/>
+    
+    <target name="deploy" depends="stop, build, start" description="Deploys the project"/>
+
+    <target name="war" depends="build" description="create a war file from the 'build dir'">
+        <war destfile="ROOT.war" basedir="${build.dir}" webxml="${build.dir}/WEB-INF/web.xml"/>
+    </target>
+
+    <target name="start"
+            description="Start Tomcat">
+        <echo message="Starting Tomcat"/>
+        <delete>
+            <fileset dir="${tomcat.home}/logs"/>
+        </delete>
+        <exec executable="${tomcat.home}/bin/catalina.sh">
+            <arg value="start"/>
+        </exec>
+    </target>
+
+    <target name="stop"
+            description="Stops Tomcat">
+        <echo message="Stopping Tomcat"/>
+        <exec executable="${tomcat.home}/bin/catalina.sh">
+            <arg value="stop"/>
+        </exec>
+    </target>
+</project>
